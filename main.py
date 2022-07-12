@@ -6,6 +6,9 @@ import telebot
 from telebot import types
 user_chek = 0
 
+vocalist = 'Brigitte Bardot'
+music = 'inside/'+'Moi Je Joue'+'.m4a'
+
 def bot():
     txt = open('inside/bot.txt').read().split('\n')
     global bot
@@ -41,6 +44,9 @@ def keyboard(message):
         bot.send_message(message.chat.id, mes_txt('start'), reply_markup=markup)
 
 #________________________
+@bot.message_handler(commands=['101'])  # 101
+def one_zero_one(message): bot.send_audio(message.chat.id, open(music, 'rb'), '', '', vocalist)
+
 @bot.message_handler(commands=['start'])
 def start(message):
     keyboard(message)
@@ -70,6 +76,7 @@ def textmessages(message):
 
     elif(message.text.lower() == keyboard_1('about')):
         bot.send_message(message.chat.id, mes_txt('about'))
+        bot.send_message(message.chat.id, mes_txt('links'))
 
     elif (message.text.lower() == keyboard_1('video_bot')):
         bot.send_message(message.chat.id, mes_txt('video_bot'))
@@ -85,7 +92,7 @@ def textmessages(message):
     else:
         bot.send_message(message.from_user.id, mes_txt('bag'))
 
-@bot.message_handler(content_types=['document', 'photo', 'video', 'video_note'])
+@bot.message_handler(content_types=['document', 'video', 'video_note', 'audio', 'voice'])
 def file(message):
         content = message.content_type
         if content == 'photo':
@@ -96,6 +103,10 @@ def file(message):
             file_info = bot.get_file(message.video.file_id)
         elif content == 'video_note':
             file_info = bot.get_file(message.video_note.file_id)
+        elif content == 'audio':
+            file_info = bot.get_file(message.audio.file_id)
+        elif content == 'voice':
+            file_info = bot.get_file(message.voice.file_id)
 
         downloaded_file = bot.download_file(file_info.file_path)
 
@@ -111,7 +122,12 @@ def file(message):
 
         global user_chek
         if(user_chek == 1):
-            bot.send_video_note(message.chat.id, n_file)
+            if (content == 'video' or content == 'video_note'):
+                bot.send_video_note(message.chat.id, n_file)
+
+            elif (content == 'audio' or content == 'voice'):
+                bot.send_voice(message.chat.id, n_file)
+
             user_chek = 0
 
             bot.send_message(message.from_user.id, mes_txt('user_chek') + (open(f'user/{str(message.chat.id)}').read().split('\n'))[0])
@@ -120,14 +136,24 @@ def file(message):
             txt = open(f'user/{str(message.chat.id)}').read().split('\n')
             chanal = txt[0]
             try:
-                bot.send_video_note(chanal, n_file)
-                bot.send_message(message.from_user.id, mes_txt('good'))
+                if (content == 'video' or content == 'video_note'):
+                    bot.send_video_note(chanal, n_file)
+                    bot.send_message(message.from_user.id, mes_txt('good_video'))
+
+                elif (content == 'audio' or content == 'voice'):
+                    bot.send_voice(chanal, n_file)
+                    bot.send_message(message.from_user.id, mes_txt('good_audio'))
+
 
             except:
                 bot.send_message(message.from_user.id, mes_txt('e'))
 
         else:
-            bot.send_video_note(message.chat.id, n_file)
+            if (content == 'video' or content == 'video_note'):
+                bot.send_video_note(message.chat.id, n_file)
+
+            elif (content == 'audio' or content == 'voice'):
+                bot.send_voice(message.chat.id, n_file)
 
         file.close()
         os.remove(name_file)
