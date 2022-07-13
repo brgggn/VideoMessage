@@ -4,25 +4,12 @@ import os
 import os.path
 import telebot
 from telebot import types
+from key import *
 user_chek = 0
 
 vocalist = 'Brigitte Bardot'
 music = 'inside/'+'Moi Je Joue'+'.m4a'
 
-def bot():
-    txt = open('inside/bot.txt').read().split('\n')
-    global bot
-    bot = telebot.TeleBot(txt[0])
-    return 0
-
-def adm():
-    txt = open('inside/adm.txt').read().split('\n')
-    global adm
-    adm = txt[0]
-    return 0
-
-adm()
-bot()
 #________________________
 try:
     os.mkdir("user")
@@ -93,7 +80,7 @@ def textmessages(message):
         keyboard(message)
 
     else:
-        bot.send_message(message.chat.id, message.text + start('mirror'))
+        bot.send_message(message.chat.id, message.text + mes_txt('mirror'))
 
 @bot.message_handler(content_types=['document', 'video', 'video_note', 'audio', 'voice'])
 def file(message):
