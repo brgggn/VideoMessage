@@ -61,6 +61,9 @@ def help(message):
     bot.send_photo(message.chat.id, open('inside/2.png', 'rb'))
     open('inside/2.png', 'rb').close()
 
+@bot.message_handler(commands=['error'])
+def error(message): print(e)
+
 @bot.message_handler(content_types=['text'])
 def textmessages(message):
     if (message.text.lower() == '101'):
@@ -90,7 +93,7 @@ def textmessages(message):
         keyboard(message)
 
     else:
-        bot.send_message(message.from_user.id, mes_txt('bag'))
+        bot.send_message(message.chat.id, message.text + start('mirror'))
 
 @bot.message_handler(content_types=['document', 'video', 'video_note', 'audio', 'voice'])
 def file(message):
