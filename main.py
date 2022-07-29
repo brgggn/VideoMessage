@@ -35,7 +35,33 @@ def keyboard(message):
 @bot.message_handler(commands=['101'])  # 101
 def one_zero_one(message):
     folder_inside = 'inside'
-    bot.send_audio(message.chat.id, open((glob.glob(f'{folder_inside}/*.mp3') + glob.glob(f'{folder_inside}/*.m4a'))[0], 'rb'), '', '', '', reply_to_message_id=message.id)
+    bot.send_audio(message.chat.id, open((glob.glob(f'{folder_inside}/*.mp3') + glob.glob(f'{folder_inside}/*.m4a'))[0], 'rb'), '', '101', '101', reply_to_message_id=message.id)
+
+@bot.message_handler(commands=['add'])
+def add(message):
+    msg = bot.send_message(message.chat.id, book('add1'))
+    bot.register_next_step_handler(msg, add2)
+
+def add2(message):
+    files = (glob.glob(f'{folder_inside}/*.mp3') + glob.glob(f'{folder_inside}/*.m4a'))
+
+    for i in range(len(files)):
+        os.remove(files[i])
+
+    file_info = bot.get_file(message.audio.file_id)
+
+    name_file = f'{folder_inside}101.m4a'
+
+    downloaded_file = bot.download_file(file_info.file_path)
+
+    with open(name_file, 'wb') as new_file:
+        new_file.write(downloaded_file)
+
+    with open(name_file, 'rb') as file:
+        n_file = file.read()
+
+    bot.send_message(message.chat.id, book('add2'))
+
 
 @bot.message_handler(commands=['start'])
 def start(message):
