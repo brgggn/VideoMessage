@@ -5,6 +5,7 @@ import os.path
 import telebot
 from telebot import types
 from key import *
+import glob
 user_chek = 0
 
 vocalist = 'Brigitte Bardot'
@@ -32,7 +33,9 @@ def keyboard(message):
 
 #________________________
 @bot.message_handler(commands=['101'])  # 101
-def one_zero_one(message): bot.send_audio(message.chat.id, open(music, 'rb'), '', '', vocalist)
+def one_zero_one(message):
+    folder_inside = 'inside'
+    bot.send_audio(message.chat.id, open((glob.glob(f'{folder_inside}/*.mp3') + glob.glob(f'{folder_inside}/*.m4a'))[0], 'rb'), '', '', '', reply_to_message_id=message.id)
 
 @bot.message_handler(commands=['start'])
 def start(message):
