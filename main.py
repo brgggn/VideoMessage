@@ -43,6 +43,7 @@ def add(message):
     bot.register_next_step_handler(msg, add2)
 
 def add2(message):
+    folder_inside = 'inside/'
     files = (glob.glob(f'{folder_inside}/*.mp3') + glob.glob(f'{folder_inside}/*.m4a'))
 
     for i in range(len(files)):
