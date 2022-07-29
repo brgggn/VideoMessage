@@ -39,7 +39,7 @@ def one_zero_one(message):
 
 @bot.message_handler(commands=['add'])
 def add(message):
-    msg = bot.send_message(message.chat.id, book('add1'))
+    msg = bot.send_message(message.chat.id, mes_txt('add1'))
     bot.register_next_step_handler(msg, add2)
 
 def add2(message):
@@ -60,7 +60,7 @@ def add2(message):
     with open(name_file, 'rb') as file:
         n_file = file.read()
 
-    bot.send_message(message.chat.id, book('add2'))
+    bot.send_message(message.chat.id, mes_txt('add2'))
 
 
 @bot.message_handler(commands=['start'])
