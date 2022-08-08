@@ -157,11 +157,11 @@ def file(message):
             chanal = txt[0]
             try:
                 if (content == 'video' or content == 'video_note'):
-                    bot.send_video_note(chanal, n_file)
+                    bot.send_video_note(chanal, n_file, disable_notification=1)
                     bot.send_message(message.from_user.id, mes_txt('good_video'))
 
                 elif (content == 'audio' or content == 'voice'):
-                    bot.send_voice(chanal, n_file)
+                    bot.send_voice(chanal, n_file, disable_notification=1)
                     bot.send_message(message.from_user.id, mes_txt('good_audio'))
 
 
